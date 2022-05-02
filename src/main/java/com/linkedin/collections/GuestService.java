@@ -14,8 +14,14 @@ public class GuestService {
 		 *  who have indicated the provided room as the first preference in their preferred
 		 *  room list. 
 		 */
-		
-		return null; 
+
+		List<Guest> guestsList = new ArrayList<>();
+		for (Guest guest : guests){
+			if(guest.getPreferredRooms().get(0).equals(room)){
+				guestsList.add(guest);
+			}
+		}
+		return guestsList;
 
 	}
 
@@ -26,7 +32,16 @@ public class GuestService {
 		 *  ahead of those guests not in the program. Otherwise, guests are arranged in the
 		 *  order they were inserted.
 		 */
-
+		if (guest.isLoyaltyProgramMember()){
+			for (int i = 0; i < checkinList.size() ; i++) {
+				if(!checkinList.get(i).isLoyaltyProgramMember()) {
+					checkinList.add(i, guest);
+					break;
+				}
+			}
+		} else {
+			checkinList.add(guest);
+		}
 	}
 	
 	public void swapPosition(Guest guest1, Guest guest2) {
@@ -34,8 +49,13 @@ public class GuestService {
 		/*
 		 *  3.  Swaps the position of the two provided guests within the checkinList.
 		 *  If guests are not currently in the list no action is required.
-		 */ 
-
+		 */
+		int indexOfGuest = 0;
+		if(checkinList.containsAll(List.of(guest1, guest2))){
+			indexOfGuest = checkinList.indexOf(guest1);
+			checkinList.set(checkinList.indexOf(guest2), guest1);
+			checkinList.set(indexOfGuest, guest2);
+		}
 	}
 
 	public List<Guest> getCheckInList() {
